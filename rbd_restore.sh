@@ -72,6 +72,7 @@ dd if=/dev/zero of=${rbd} bs=1 count=0 seek=${rbd_size} 2>/dev/null
 #for file_name in $(ls -1  '${base}.*'  2>/dev/null); do
 for file_name in $base_files; do
   seek_loc=$(echo "${file_name}"  | awk -F_ '{print $1}' | awk -v os=${obj_size} -v rs=${rebuild_block_size} -F. '{print os*strtonum("0x" $NF)/rs}')
+  echo "add $seek_loc block size to  ${rbd}"
   dd conv=notrunc if=${file_name} of=${rbd} seek=${seek_loc} bs=${rebuild_block_size} 2>/dev/null
 done
 
